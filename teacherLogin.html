@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Login For AMS</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f6f7ff 0%, #eef1ff 100%);
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+        }
+
+        .input-field {
+            transition: border-color 0.2s ease;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .input-field:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+
+        .form-container {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .floating-label {
+            top: -12px;
+            left: 8px;
+            padding: 0 4px;
+            background: white;
+            font-size: 0.85em;
+        }
+
+        .social-icon {
+            transition: all 0.2s ease;
+        }
+
+        .social-icon:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
+    </style>
+</head>
+<body class="px-4">
+    <div class="form-container glass-card w-full max-w-md p-8 rounded-2xl">
+        <div class="text-center mb-8">
+            <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-2">Welcome Back</h1>
+            <p class="text-gray-600">Sign in to your teacher account</p>
+        </div>
+
+        <form id="loginForm" method="post" action="teacher-login.php" class="space-y-6">
+            <div class="relative">
+                <label class="floating-label absolute text-gray-600">Email Address</label>
+                <input type="email" name="email" required 
+                    class="input-field w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none"
+                    placeholder="your.email@example.com">
+            </div>
+
+            <div class="relative">
+                <label class="floating-label absolute text-gray-600">Password</label>
+                <input type="password" name="password" required 
+                    class="input-field w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none"
+                    placeholder="••••••••">
+            </div>
+
+            <div class="flex items-center justify-between text-sm">
+                <label class="flex items-center">
+                    <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600">
+                    <span class="ml-2 text-gray-600">Remember me</span>
+                </label>
+                <a href="#" onclick="showResetForm()" class="text-blue-600 hover:text-blue-700 font-medium">
+                    Forgot password?
+                </a>
+            </div>
+
+            <button type="submit" class="btn-primary w-full py-3 rounded-lg text-white font-medium">
+                Sign In
+            </button>
+        </form>
+
+        <form id="resetForm" method="post" action="" class="space-y-6" style="display: none;">
+            <div class="relative">
+                <label class="floating-label absolute text-gray-600">Email Address</label>
+                <input type="email" name="reset_email" required 
+                    class="input-field w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none"
+                    placeholder="your.email@example.com">
+            </div>
+
+            <div class="relative">
+                <label class="floating-label absolute text-gray-600">New Password</label>
+                <input type="password" name="new_password" required 
+                    class="input-field w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none"
+                    placeholder="••••••••">
+            </div>
+
+            <div class="relative">
+                <label class="floating-label absolute text-gray-600">Confirm Password</label>
+                <input type="password" name="confirm_password" required 
+                    class="input-field w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none"
+                    placeholder="••••••••">
+            </div>
+
+            <button type="submit" class="btn-primary w-full py-3 rounded-lg text-white font-medium">
+                Reset Password
+            </button>
+
+            <button type="button" onclick="showLoginForm()" 
+                class="w-full py-3 rounded-lg text-gray-700 font-medium border border-gray-300 hover:bg-gray-50">
+                Back to Login
+            </button>
+        </form>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.3/gsap.min.js"></script>
+    <script>
+        // Initial animation
+        gsap.to(".form-container", {
+            duration: 1,
+            opacity: 1,
+            y: 0,
+            ease: "power3.out"
+        });
+
+        function showResetForm() {
+            gsap.to("#loginForm", {
+                duration: 0.5,
+                opacity: 0,
+                y: -20,
+                ease: "power2.inOut",
+                onComplete: function() {
+                    document.getElementById("loginForm").style.display = "none";
+                    document.getElementById("resetForm").style.display = "block";
+                    gsap.fromTo("#resetForm",
+                        { opacity: 0, y: 20 },
+                        { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }
+                    );
+                }
+            });
+        }
+
+        function showLoginForm() {
+            gsap.to("#resetForm", {
+                duration: 0.5,
+                opacity: 0,
+                y: -20,
+                ease: "power2.inOut",
+                onComplete: function() {
+                    document.getElementById("resetForm").style.display = "none";
+                    document.getElementById("loginForm").style.display = "block";
+                    gsap.fromTo("#loginForm",
+                        { opacity: 0, y: 20 },
+                        { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }
+                    );
+                }
+            });
+        }
+    </script>
+</body>
+</html>
